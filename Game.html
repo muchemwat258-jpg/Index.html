@@ -1,0 +1,684 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrainBoost Quiz Game</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0b1020;
+  --panel: #151c31;
+  --purple: #8b5cf6;
+  --blue: #38bdf8;
+  --text: #f8fafc;
+  --muted: #aab5ce;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background:
+    radial-gradient(ellipse at top, #29205a 0%, transparent 50%),
+    var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 22px 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app {
+  width: 100%;
+  max-width: 560px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 23px;
+  font-weight: bold;
+}
+
+.logo-icon {
+  background: linear-gradient(135deg, #8b5cf6, #38bdf8);
+  padding: 11px;
+  border-radius: 13px;
+}
+
+.small {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.pill {
+  background: #242342;
+  color: #c4b5fd;
+  border: 1px solid #51418a;
+  border-radius: 30px;
+  padding: 9px 12px;
+  font-size: 12px;
+}
+
+.card {
+  background: rgba(21, 28, 49, .96);
+  border: 1px solid #303956;
+  padding: 26px;
+  border-radius: 24px;
+  box-shadow: 0 20px 65px #0005;
+}
+
+.hero {
+  text-align: center;
+  padding: 10px 0 22px;
+}
+
+.hero-icon {
+  font-size: 68px;
+  margin-bottom: 15px;
+  filter: drop-shadow(0 0 20px #8b5cf699);
+}
+
+h1 {
+  font-size: clamp(28px, 7vw, 39px);
+  line-height: 1.15;
+  margin-bottom: 13px;
+}
+
+.gradient {
+  background: linear-gradient(90deg, #c4b5fd, #38bdf8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 22px 0;
+}
+
+.stat {
+  background: #202943;
+  border-radius: 14px;
+  text-align: center;
+  padding: 15px 5px;
+}
+
+.stat strong {
+  display: block;
+  font-size: 21px;
+  margin: 7px 0;
+}
+
+.stat span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  transition: .2s;
+}
+
+button:focus-visible {
+  outline: 3px solid #38bdf8;
+  outline-offset: 3px;
+}
+
+.primary {
+  width: 100%;
+  border: none;
+  border-radius: 13px;
+  padding: 16px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(100deg, #7c3aed, #4f8cff);
+  box-shadow: 0 8px 24px #7047f344;
+}
+
+.primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.12);
+}
+
+.note {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 15px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.game-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.track {
+  height: 8px;
+  background: #303750;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 25px;
+}
+
+.bar {
+  height: 100%;
+  width: 0%;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #8b5cf6, #38bdf8);
+  transition: width .3s;
+}
+
+.category {
+  color: #c4b5fd;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  margin-bottom: 12px;
+}
+
+#question {
+  font-size: 24px;
+  line-height: 1.35;
+  margin-bottom: 22px;
+}
+
+.options {
+  display: grid;
+  gap: 12px;
+}
+
+.option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  padding: 15px;
+  color: var(--text);
+  background: #202943;
+  border: 1px solid #35415f;
+  border-radius: 13px;
+  line-height: 1.4;
+}
+
+.option:hover:not(:disabled) {
+  border-color: #a78bfa;
+  background: #2b2b50;
+  transform: translateY(-1px);
+}
+
+.letter {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: #303754;
+  font-weight: bold;
+}
+
+.option.correct {
+  border-color: #34d399;
+  background: #103a35;
+}
+
+.option.correct .letter {
+  background: #059669;
+}
+
+.option.wrong {
+  border-color: #fb7185;
+  background: #401f32;
+}
+
+.option.wrong .letter {
+  background: #be123c;
+}
+
+.option:disabled {
+  cursor: default;
+}
+
+.feedback {
+  margin-top: 18px;
+  border-radius: 12px;
+  padding: 14px;
+  background: #202943;
+  line-height: 1.5;
+}
+
+.feedback.good {
+  color: #6ee7b7;
+  border: 1px solid #16866a;
+}
+
+.feedback.bad {
+  color: #fda4af;
+  border: 1px solid #a13c58;
+}
+
+.next {
+  margin-top: 16px;
+}
+
+.result {
+  text-align: center;
+}
+
+.result-icon {
+  font-size: 75px;
+  margin: 12px 0 20px;
+}
+
+.score-circle {
+  width: 145px;
+  height: 145px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 25px auto;
+  background: #202943;
+  border: 6px solid #8b5cf6;
+  box-shadow: 0 0 30px #8b5cf644;
+}
+
+.score-circle strong {
+  font-size: 36px;
+}
+
+.score-circle span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.result-message {
+  margin-bottom: 22px;
+}
+
+footer {
+  color: #75819e;
+  text-align: center;
+  font-size: 12px;
+  margin-top: 20px;
+}
+
+@media (max-width: 380px) {
+  .card { padding: 19px; }
+  #question { font-size: 21px; }
+  .logo { font-size: 19px; }
+}
+</style>
+</head>
+
+<body>
+<main class="app">
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🧠</div>
+    <div>
+      BrainBoost
+      <div class="small">THINK FAST. PLAY SMART.</div>
+    </div>
+  </div>
+  <div class="pill">🎮 QUIZ GAME</div>
+</header>
+
+<!-- WELCOME SCREEN -->
+<section class="card" id="home">
+  <div class="hero">
+    <div class="hero-icon">🚀</div>
+    <h1>Ready to test<br>your <span class="gradient">brain?</span></h1>
+    <p>Challenge yourself with fun questions.
+       Think carefully, choose your answer, and
+       climb to the top!</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div>❓</div>
+      <strong>10</strong>
+      <span>Questions</span>
+    </div>
+    <div class="stat">
+      <div>⭐</div>
+      <strong>100</strong>
+      <span>Max points</span>
+    </div>
+    <div class="stat">
+      <div>🏆</div>
+      <strong>1</strong>
+      <span>Champion</span>
+    </div>
+  </div>
+
+  <button class="primary" id="start">Start Game →</button>
+  <p class="note">No pressure. Just have fun and learn!</p>
+</section>
+
+<!-- QUIZ SCREEN -->
+<section class="card hidden" id="game">
+  <div class="game-top">
+    <div class="pill" id="category">GENERAL KNOWLEDGE</div>
+    <div class="pill">⭐ <span id="score">0</span> pts</div>
+  </div>
+
+  <div class="progress-info">
+    <span id="question-count">Question 1 of 10</span>
+    <span id="percentage">0% completed</span>
+  </div>
+
+  <div class="track">
+    <div class="bar" id="bar"></div>
+  </div>
+
+  <h2 id="question">Question goes here</h2>
+
+  <div class="options" id="options"></div>
+
+  <div id="feedback" class="feedback hidden"
+       aria-live="polite"></div>
+
+  <button class="primary next hidden" id="next">
+    Next Question →
+  </button>
+</section>
+
+<!-- RESULTS SCREEN -->
+<section class="card hidden result" id="results">
+  <div class="result-icon" id="result-icon">🏆</div>
+  <h1><span class="gradient" id="result-title">Amazing!</span></h1>
+  <p id="result-message" class="result-message">
+    You completed the challenge!
+  </p>
+
+  <div class="score-circle">
+    <strong id="final-score">0</strong>
+    <span>out of 100 points</span>
+  </div>
+
+  <p id="correct-count"></p>
+  <p id="result-comment" style="margin:15px 0 24px"></p>
+
+  <button class="primary" id="restart">🔄 Play Again</button>
+</section>
+
+<footer>BrainBoost © 2026 · Built for curious minds</footer>
+
+</main>
+
+<script>
+const questions = [
+  {
+    category: "SCIENCE",
+    question: "Which planet is known as the Red Planet?",
+    options: ["Venus", "Mars", "Jupiter", "Mercury"],
+    answer: 1,
+    explanation: "Mars looks reddish because its surface contains iron oxide."
+  },
+  {
+    category: "MATHEMATICS",
+    question: "What is 12 × 8?",
+    options: ["86", "92", "96", "108"],
+    answer: 2,
+    explanation: "12 multiplied by 8 equals 96."
+  },
+  {
+    category: "GEOGRAPHY",
+    question: "What is the capital city of Zimbabwe?",
+    options: ["Bulawayo", "Mutare", "Gweru", "Harare"],
+    answer: 3,
+    explanation: "Harare is the capital city of Zimbabwe."
+  },
+  {
+    category: "BIOLOGY",
+    question: "Which organ pumps blood around the body?",
+    options: ["Lungs", "Heart", "Kidneys", "Stomach"],
+    answer: 1,
+    explanation: "The heart pumps blood through the circulatory system."
+  },
+  {
+    category: "GENERAL KNOWLEDGE",
+    question: "How many days are there in a leap year?",
+    options: ["364", "365", "366", "367"],
+    answer: 2,
+    explanation: "A leap year has 366 days, including 29 February."
+  },
+  {
+    category: "CHEMISTRY",
+    question: "What is the chemical symbol for oxygen?",
+    options: ["Ox", "O", "Og", "Oy"],
+    answer: 1,
+    explanation: "O is the chemical symbol for the element oxygen."
+  },
+  {
+    category: "ANIMALS",
+    question: "Which is the largest land animal?",
+    options: ["Giraffe", "Hippopotamus", "African elephant", "Rhinoceros"],
+    answer: 2,
+    explanation: "The African elephant is the largest living land animal."
+  },
+  {
+    category: "ENGLISH",
+    question: "Which word is a verb in this sentence: 'Birds fly high'?",
+    options: ["Birds", "Fly", "High", "The"],
+    answer: 1,
+    explanation: "Fly is the verb because it expresses the action."
+  },
+  {
+    category: "ASTRONOMY",
+    question: "What is the closest star to Earth?",
+    options: ["Sirius", "The Sun", "Polaris", "Alpha Centauri A"],
+    answer: 1,
+    explanation: "The Sun is our closest star."
+  },
+  {
+    category: "ENVIRONMENT",
+    question: "Which process allows green plants to make food using sunlight?",
+    options: ["Respiration", "Digestion", "Photosynthesis", "Fermentation"],
+    answer: 2,
+    explanation: "Photosynthesis uses light energy to make sugars from carbon dioxide and water."
+  }
+];
+
+const $ = id => document.getElementById(id);
+
+let current = 0;
+let score = 0;
+let correctAnswers = 0;
+let answered = false;
+
+function showScreen(screen) {
+  ["home", "game", "results"].forEach(id => {
+    $(id).classList.toggle("hidden", id !== screen);
+  });
+}
+
+function startGame() {
+  current = 0;
+  score = 0;
+  correctAnswers = 0;
+  answered = false;
+  showScreen("game");
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+
+  const q = questions[current];
+  const progress = Math.round(current / questions.length * 100);
+
+  $("category").textContent = q.category;
+  $("score").textContent = score;
+  $("question-count").textContent =
+    `Question ${current + 1} of ${questions.length}`;
+  $("percentage").textContent = `${progress}% completed`;
+  $("bar").style.width = progress + "%";
+  $("question").textContent = q.question;
+
+  $("feedback").className = "feedback hidden";
+  $("feedback").textContent = "";
+  $("next").classList.add("hidden");
+
+  $("next").textContent =
+    current === questions.length - 1
+      ? "See My Results 🏆"
+      : "Next Question →";
+
+  const optionsBox = $("options");
+  optionsBox.replaceChildren();
+
+  q.options.forEach((option, index) => {
+    const button = document.createElement("button");
+    button.className = "option";
+
+    const letter = document.createElement("span");
+    letter.className = "letter";
+    letter.textContent = String.fromCharCode(65 + index);
+
+    const label = document.createElement("span");
+    label.textContent = option;
+
+    button.append(letter, label);
+    button.addEventListener("click", () => chooseAnswer(index));
+    optionsBox.appendChild(button);
+  });
+}
+
+function chooseAnswer(index) {
+  if (answered) return;
+  answered = true;
+
+  const q = questions[current];
+  const buttons = $("options").querySelectorAll("button");
+  const isCorrect = index === q.answer;
+
+  buttons.forEach((button, i) => {
+    button.disabled = true;
+
+    if (i === q.answer) {
+      button.classList.add("correct");
+      button.querySelector(".letter").textContent = "✓";
+    }
+
+    if (i === index && !isCorrect) {
+      button.classList.add("wrong");
+      button.querySelector(".letter").textContent = "×";
+    }
+  });
+
+  if (isCorrect) {
+    score += 10;
+    correctAnswers++;
+    $("feedback").className = "feedback good";
+    $("feedback").textContent = "✓ Correct! " + q.explanation;
+  } else {
+    $("feedback").className = "feedback bad";
+    $("feedback").textContent =
+      "✗ Not quite. Correct answer: " +
+      q.options[q.answer] + ". " + q.explanation;
+  }
+
+  $("score").textContent = score;
+  $("feedback").classList.remove("hidden");
+  $("next").classList.remove("hidden");
+  $("next").focus();
+}
+
+function showResults() {
+  showScreen("results");
+
+  const percent = score;
+  let title, icon, message, comment;
+
+  if (percent === 100) {
+    title = "Perfect Score!";
+    icon = "🏆";
+    message = "Incredible! You answered every question correctly.";
+    comment = "You're a BrainBoost champion!";
+  } else if (percent >= 70) {
+    title = "Excellent Work!";
+    icon = "🌟";
+    message = "Fantastic effort. You know your stuff!";
+    comment = "Keep challenging yourself to reach 100.";
+  } else if (percent >= 40) {
+    title = "Good Effort!";
+    icon = "💪";
+    message = "You're making progress. Keep learning!";
+    comment = "Every question is a chance to grow.";
+  } else {
+    title = "Keep Going!";
+    icon = "🚀";
+    message = "Every champion starts by learning.";
+    comment = "Try again and see how much you can improve.";
+  }
+
+  $("result-icon").textContent = icon;
+  $("result-title").textContent = title;
+  $("result-message").textContent = message;
+  $("final-score").textContent = score;
+  $("correct-count").textContent =
+    `You got ${correctAnswers} out of ${questions.length} correct.`;
+  $("result-comment").textContent = comment;
+}
+
+$("start").addEventListener("click", startGame);
+$("restart").addEventListener("click", startGame);
+
+$("next").addEventListener("click", () => {
+  if (!answered) return;
+
+  if (current < questions.length - 1) {
+    current++;
+    renderQuestion();
+  } else {
+    $("bar").style.width = "100%";
+    $("percentage").textContent = "100% completed";
+    showResults();
+  }
+});
+</script>
+</body>
+</html>
