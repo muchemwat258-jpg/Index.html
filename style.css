@@ -1,0 +1,184 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #141e30, #243b55);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.game-container {
+    width: 100%;
+    max-width: 500px;
+    background: #ffffff12;
+    border: 1px solid #ffffff25;
+    border-radius: 24px;
+    padding: 25px 20px;
+    text-align: center;
+    box-shadow: 0 10px 35px #00000040;
+}
+
+h1 {
+    color: #ffd166;
+    font-size: 27px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #d4dce8;
+    margin-bottom: 25px;
+}
+
+.score-board {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.score {
+    background: #ffffff15;
+    border-radius: 15px;
+    padding: 15px 30px;
+    min-width: 120px;
+}
+
+.score span {
+    color: #b9c7d9;
+    font-size: 14px;
+}
+
+.score h2 {
+    color: #ffd166;
+    font-size: 35px;
+    margin-top: 5px;
+}
+
+.battle {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 25px 0;
+}
+
+.fighter p {
+    font-size: 12px;
+    color: #d4dce8;
+    margin-bottom: 10px;
+}
+
+.emoji {
+    font-size: 55px;
+    background: #ffffff12;
+    width: 90px;
+    height: 90px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.versus {
+    font-weight: bold;
+    color: #ffd166;
+    font-size: 20px;
+}
+
+#result {
+    color: #ffd166;
+    margin: 15px 0 8px;
+}
+
+#message {
+    font-size: 14px;
+    color: #d4dce8;
+    min-height: 35px;
+    margin-bottom: 20px;
+}
+
+.choices {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.choice {
+    flex: 1;
+    max-width: 115px;
+    padding: 15px 5px;
+    border: none;
+    border-radius: 15px;
+    background: #ffffff;
+    color: #243b55;
+    font-size: 35px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.choice span {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.choice:hover {
+    background: #ffd166;
+    transform: translateY(-5px);
+}
+
+.choice:active {
+    transform: scale(0.95);
+}
+
+#reset-button {
+    margin-top: 25px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    background: #06d6a0;
+    color: #102a43;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#reset-button:hover {
+    background: #50f0c1;
+}
+
+.footer {
+    font-size: 12px;
+    color: #aebdd0;
+    margin-top: 20px;
+}
+
+@media (max-width: 380px) {
+    h1 {
+        font-size: 22px;
+    }
+
+    .score {
+        padding: 12px 20px;
+        min-width: 100px;
+    }
+
+    .emoji {
+        width: 75px;
+        height: 75px;
+        font-size: 45px;
+    }
+
+    .choice {
+        font-size: 29px;
+    }
+}
